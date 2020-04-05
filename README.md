@@ -17,3 +17,10 @@ Basically:
 * Forms message content from signal data structure.
 * Forms request for delivery via Discord API.
 * Dispatches notification asynchronously via Discord API.
+
+## What's in a notification signal?
+A notification signal processed by this application *must* include:
+* *a destination identifier*: a user or team ID.
+* *related resource identifier*: ID of the originating resource or asset
+* *notification type identifier*: further describes signal; used in presenting the notification.
+* delivery method identifier: used to determine whether the signal should be processed.
