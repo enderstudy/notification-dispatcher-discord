@@ -21,6 +21,6 @@ Basically:
 ## What's in a notification signal?
 A notification signal processed by this application *must* include:
 * *a destination identifier*: a user or team ID.
-* *related resource identifier*: ID of the originating resource or asset
-* *notification type identifier*: further describes signal; used in presenting the notification.
-* *delivery method identifier*: used to determine whether the signal should be processed.
+* *a related resource identifier*: ID of the originating resource or asset.
+* *a notification type identifier*: further describes signal; used in presenting the notification.
+* *a delivery method identifier*: used to determine whether the signal should be processed by this application.
