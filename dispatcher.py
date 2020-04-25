@@ -16,15 +16,14 @@ class DispatcherDiscord(discord.Client):
     async def on_message(self, message):
         if message.author == self.user:
             return
-        await message.channel.send("DidahDiddit")
+        await message.channel.send("Object successfully transferred to /dev/null.")
         print(f"Fetching dev user object: {dev_id}")
         dev_dm_id = await self.fetch_user(int(dev_id))
         print(f"Found object for dev user {dev_dm_id.name}.")
-        await dev_dm_id.send("Didahdahdit")
+        await dev_dm_id.send(f"{message.author.mention}: {message.content}")
 
 
 # In the absence of an API to receive dispatch requests, demonstrate DM notifications when a user post receives a reaction.
 #    async def on_reaction_add(reaction, user):
-print(dev_id, bot_id)
 dispatcher = DispatcherDiscord()
 dispatcher.run(bot_id)
