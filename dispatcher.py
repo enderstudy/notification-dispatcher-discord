@@ -22,6 +22,15 @@ class DispatcherDiscord(discord.Client):
         print(f"Found object for dev user {dev_dm_id.name}.")
         await dev_dm_id.send(f"{message.author.mention}: {message.content}")
 
+        request = {'id': 204254057202712576, 'message': 'Your post about furries was just downvoted!'}
+        await dispatch_message(request[id], request[message])
+
+    async def dispatch_message(self, target, message):
+        print(f"Received dispatch request for {request[id]}.\nValidating target ID...")
+        dispatch_target = await self.fetch_user(request[id])
+        print("Dispatching requested message...")
+        await dispatch_target.send(request[message])
+        print("w00t!")
 
 # In the absence of an API to receive dispatch requests, demonstrate DM notifications when a user post receives a reaction.
 #    async def on_reaction_add(reaction, user):
