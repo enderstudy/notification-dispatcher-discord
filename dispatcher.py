@@ -2,18 +2,13 @@
 
 import discord
 import os
-import threading
+from aiohttp import web
 from flask import Flask, request, jsonify, json
 
 bot_id = os.environ['ES_DISPATCHER_DISCORD_API_ID']
 dev_id = int(os.environ['ES_DEVELOPER_DISCORD_USER_ID'])
 
 class DispatcherDiscord(discord.Client):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.bg_api = self.loop.create_task(self.run_flask())
-
     async def on_connect(self):
         print('Connected to Discord; proceeding with with login...')
 
@@ -36,22 +31,43 @@ class DispatcherDiscord(discord.Client):
         print(f"Received dispatch request for {target}.\nValidating target ID...")
         dispatch_target = await self.fetch_user(target)
         print("Dispatching requested message...")
-        await dispatc0h_target.send(message)
+        await dispatch_target.send(message)
         print("w00t!")
+
+    async def post_notify(self, req):
+        # api = web.Application()
+        # api.add_routes([web.post('/notify', api_notify)])
+        data = await req.json()
+        print(data)
+        response = {"response":200}
+        #fails after this
+        await self.dispatch_message(data['id'], data['message'])
+        return await web.json_response(response)
+    
+    try:
+        api = web.Application()
+        api.router.add_post('/notify', post_notify)
+        web.run_app(api, port=3333)
+    except:
+        client.loop.run_until_complete(client.lockout())
+
+    # api = web.Application()
+    # api.add_routes(routes)
+    # web.run_app(api, host='localhost', port=3333)
 
 # Let's shoehorn flask back in here and watch as nothing works
 
-    api = Flask(__name__)
+    # api = Flask(__name__)
 
-    @api.route("/notify", methods=["POST"])
-    async def notify(self):
-        data = json.loads(request.data)
-        print(data)
-        await dispatcher.dispatch_message(data['id'], data['message'])
+    # @api.route("/notify", methods=["POST"])
+    # async def notify(self):
+    #     data = json.loads(request.data)
+    #     print(data)
+    #     await dispatcher.dispatch_message(data['id'], data['message'])
 
-    async def run_flask(self):
-        print("Running Flask...")
-        await api.run(host='127.0.0.1', port=3333, daemon=True).start()
+    # async def run_flask(self):
+    #     print("Running Flask...")
+    #     await api.run(host='127.0.0.1', port=3333, daemon=True).start()
 
 dispatcher = DispatcherDiscord()
 dispatcher.run(bot_id)
