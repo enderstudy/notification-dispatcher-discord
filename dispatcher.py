@@ -19,15 +19,6 @@ class DispatcherDiscord(discord.Client):
     async def on_ready(self):
         print(f'Dispatcher {self.user} ready.')
 
-    async def on_message(self, message):
-        if message.author == self.user:
-            return
-        await message.channel.send("Object successfully transferred to /dev/null.")
-        print(f"Fetching dev user object: {dev_id}")
-        dev_dm_id = await self.fetch_user(int(dev_id))
-        print(f"Found object for dev user {dev_dm_id.name}.")
-        await dev_dm_id.send(f"{message.author.mention}: {message.content}")
-
     async def dispatch_message(self, target, message):
         print(f"Received dispatch request for {target}.\nValidating target ID...")
         dispatch_target = await self.fetch_user(target)
@@ -43,6 +34,7 @@ class DispatcherDiscord(discord.Client):
         return web.json_response(response)
     
     async def start_api(self):
+        print(f"Starting Dispatcher API on {api_host}:{api_port}")
         api = web.Application()
         api.router.add_post('/notify', self.post_notify)
         runner = web.AppRunner(api)
