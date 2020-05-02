@@ -6,8 +6,8 @@ from aiohttp import web
 
 bot_id = os.environ['ES_DISPATCHER_DISCORD_API_ID']
 dev_id = int(os.environ['ES_DEVELOPER_DISCORD_USER_ID'])
-api_port = 3333
-api_host = 'localhost'
+api_port = os.environ['ES_DISPATCHER_API_PORT']
+api_host = os.environ['ES_DISPATCHER_API_HOST']
 class DispatcherDiscord(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
