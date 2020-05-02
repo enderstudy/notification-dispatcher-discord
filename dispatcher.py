@@ -6,7 +6,8 @@ from aiohttp import web
 
 bot_id = os.environ['ES_DISPATCHER_DISCORD_API_ID']
 dev_id = int(os.environ['ES_DEVELOPER_DISCORD_USER_ID'])
-
+api_port = 3333
+api_host = 'localhost'
 class DispatcherDiscord(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -27,9 +28,6 @@ class DispatcherDiscord(discord.Client):
         print(f"Found object for dev user {dev_dm_id.name}.")
         await dev_dm_id.send(f"{message.author.mention}: {message.content}")
 
-        dispatch_request = {'id': 204254057202712576, 'message': 'Your post about furries was just downvoted!'}
-        await self.dispatch_message(dispatch_request['id'], dispatch_request['message'])
-
     async def dispatch_message(self, target, message):
         print(f"Received dispatch request for {target}.\nValidating target ID...")
         dispatch_target = await self.fetch_user(target)
@@ -49,7 +47,7 @@ class DispatcherDiscord(discord.Client):
         api.router.add_post('/notify', self.post_notify)
         runner = web.AppRunner(api)
         await runner.setup()
-        site = web.TCPSite(runner, 'localhost', 3333)
+        site = web.TCPSite(runner, api_host, api_port)
         await site.start()
 
 
