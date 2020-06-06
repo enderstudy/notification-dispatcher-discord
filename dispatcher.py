@@ -26,6 +26,19 @@ class DispatcherDiscord(discord.Client):
         await dispatch_target.send(message)
 
     async def post_notify(self, req):
+        # Check that the request content_type is json
+        # Return 400 if content_type is not JSON
+        # Check that the request is valid JSON
+        # (try/except json.loads(req.content)) or the aiohttp equivalent
+        # Return 400 if it is invalid JSON
+        # Check that the request contains a nonzero number of notification jobs
+        # Return 400 if the request contains no notification jobs
+        # (check array length at specified level) *** consult spec
+        # For each notification job, check that it has the required fields
+        # (consult spec)
+        # Return 400 if all jobs fail this check
+        # Return 207 if request contains passing and failing jobs
+        # Dispatch all passing jobs
         data = await req.json()
         print(data)
         response = {"response":200}
